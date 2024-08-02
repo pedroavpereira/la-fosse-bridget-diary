@@ -1,7 +1,7 @@
 const db = require("../database/connect.js");
 
 class Entry {
-  constructor(post_id, title, content, user_id) {
+  constructor({ post_id, title, content, user_id }) {
     this.post_id = post_id;
     this.title = title;
     this.content = content;
@@ -21,7 +21,7 @@ class Entry {
 
     if (post.rows.length === 0) throw new Error("No entry found");
 
-    return new Entry(post.rows);
+    return new Entry(post.rows[0]);
   }
 
   static async create(data) {
@@ -32,7 +32,7 @@ class Entry {
 
     if (newPost.rows.length === 0) throw new Error("Error creating a new post");
 
-    return new Entry(newPost.rows);
+    return new Entry(newPost.rows[0]);
   }
 
   async destroy() {
@@ -43,7 +43,7 @@ class Entry {
     if (deletedPost.rows.length === 0)
       throw new Error("Error creating a new post");
 
-    return new Entry(deletedPost.rows);
+    return new Entry(deletedPost.rows[0]);
   }
 }
 
