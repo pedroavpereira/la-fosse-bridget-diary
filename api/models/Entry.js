@@ -29,6 +29,33 @@ class Entry {
     return new Entry(post.rows[0]);
   }
 
+  static async search({ entries, user_id }) {
+    const fields = [];
+    const values = [];
+
+    entries.forEach((entry, i, arr) => {
+      fields.push(
+        `${entry[0]} = $${i + 1}${arr.length - 1 === i ? "" : "AND "}`
+      );
+      values.push(entry[1]);
+    });
+
+    const fieldsQuery = fields.join(" ");
+
+    const query = `Select * from post WHERE ${fieldsQuery} AND user_id = $${
+      values.length + 1
+    }
+    `;
+
+    console.log(query);
+
+    const posts = await db.query(query, [...values, user_id]);
+
+    if (posts.rows.length === 0) throw new Error("No entry found");
+
+    return posts.rows.map((p) => new Entry(p));
+  }
+
   static async create(data) {
     const newPost = await db.query(
       "INSERT INTO post (title,content,user_id) VALUES ($1 , $2 , $3 ) RETURNING * ;",
