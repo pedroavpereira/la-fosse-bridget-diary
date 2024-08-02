@@ -35,6 +35,7 @@ const search = async (req, res) => {
 
     res.status(200).json({ success: true, data: posts });
   } catch (err) {
+    console.log(err);
     res.status(404).json({ success: false, error: err.message });
   }
 };

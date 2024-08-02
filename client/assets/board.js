@@ -96,21 +96,26 @@ document.getElementById("search-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const date = document.getElementById("search-date").value;
 
-  const query = new URLSearchParams({ post_date: date }).toString();
+  //   const response = await fetch(
+  //     `https://la-fosse-bridget-diary.onrender.com/diary/search?post_timestamp=${date}`,
+  //     {
+  //       headers: { Authorization: localStorage.getItem("token") },
+  //     }
+  //   );
 
   const response = await fetch(
-    `https://la-fosse-bridget-diary.onrender.com/diary/${query}`,
+    `https://la-fosse-bridget-diary.onrender.com/diary/search?post_timestamp=${date}`,
     {
       headers: { Authorization: localStorage.getItem("token") },
     }
   );
 
   if (response.status === 200) {
-    const posts = await response.json();
+    const { data } = await response.json();
     const container = document.getElementById("posts");
     container.innerHTML = "";
 
-    posts.forEach((post) => {
+    data.forEach((post) => {
       const elem = createPostElement(post);
       container.appendChild(elem);
     });
@@ -123,21 +128,19 @@ document
     e.preventDefault();
     const category = document.getElementById("search-category").value;
 
-    const query = new URLSearchParams({ category: category }).toString();
-
     const response = await fetch(
-      `https://la-fosse-bridget-diary.onrender.com/diary?${query}`,
+      `https://la-fosse-bridget-diary.onrender.com/diary/search?category=${category}`,
       {
         headers: { Authorization: localStorage.getItem("token") },
       }
     );
 
     if (response.status === 200) {
-      const posts = await response.json();
+      const { data } = await response.json();
       const container = document.getElementById("posts");
       container.innerHTML = "";
 
-      posts.forEach((post) => {
+      data.forEach((post) => {
         const elem = createPostElement(post);
         container.appendChild(elem);
       });
