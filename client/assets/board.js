@@ -8,6 +8,7 @@ function createPostElement(data) {
   //         <p>${data.category}</p>
   //     </div>`
   //   );
+  console.log(data);
 
   const post = document.createElement("div");
   post.className = "post";
@@ -21,7 +22,7 @@ function createPostElement(data) {
   post.appendChild(content);
 
   const postDate = document.createElement("p");
-  postDate.textContent = `Date: ${data["post_date"]}`;
+  postDate.textContent = `Date: ${data["post_timestamp"]}`;
   post.appendChild(postDate);
 
   const category = document.createElement("p");
@@ -43,19 +44,18 @@ function createPostElement(data) {
 
 // Load posts from the server, this is from chatgpt dont know if it works
 async function loadPosts() {
-  const response = await fetch(
-    "https://la-fosse-bridget-diary.onrender.com/diary/",
-    {
-      headers: { Authorization: localStorage.getItem("token") },
-    }
-  );
+  const response = await fetch("http://127.0.0.1:3000/diary/", {
+    headers: { Authorization: localStorage.getItem("token") },
+  });
 
   if (response.status === 200) {
     const { data } = await response.json();
+    console.log(data);
     const container = document.getElementById("posts");
     container.innerHTML = ""; // Clear existing posts
 
     data.forEach((post) => {
+      console.log(post);
       const elem = createPostElement(post);
       container.appendChild(elem);
     });
@@ -73,19 +73,17 @@ document.getElementById("post-form").addEventListener("submit", async (e) => {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token"),
     },
     body: JSON.stringify({
       title: form.get("title"),
       content: form.get("content"),
-      post_date: form.get("post-date"),
+      post_timestamp: form.get("post-date"),
       category: form.get("category"),
     }),
   };
 
-  const result = await fetch(
-    "https://la-fosse-bridget-diary.onrender.com/diary",
-    options
-  );
+  const result = await fetch("http://127.0.0.1:3000/diary", options);
 
   if (result.status === 201) {
     loadPosts();

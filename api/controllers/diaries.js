@@ -43,9 +43,10 @@ const search = async (req, res) => {
 const create = async (req, res) => {
   try {
     const data = req.body;
-    const newPost = await Entry.create(data);
+    const newPost = await Entry.create({ ...data, user_id: req.user_id });
     res.status(201).json({ success: true, data: newPost });
   } catch (err) {
+    console.log(err);
     res.status(400).json({ success: false, error: err.message });
   }
 };

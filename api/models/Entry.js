@@ -1,11 +1,13 @@
 const db = require("../database/connect.js");
 
 class Entry {
-  constructor({ post_id, title, content, user_id }) {
+  constructor({ post_id, title, content, user_id, post_timestamp, category }) {
     this.post_id = post_id;
     this.title = title;
     this.content = content;
     this.user_id = user_id;
+    this.category = category;
+    this.post_timestamp = post_timestamp;
   }
 
   static async showAll(userId) {
@@ -52,10 +54,10 @@ class Entry {
     return posts.rows.map((p) => new Entry(p));
   }
 
-  static async create(data) {
+  static async create({ title, content, post_timestamp, category, user_id }) {
     const newPost = await db.query(
-      "INSERT INTO post (title,content,user_id) VALUES ($1 , $2 , $3 ) RETURNING * ;",
-      [data.title, data.content, data.user_id]
+      "INSERT INTO post (title,content,post_timestamp,category,user_id) VALUES ($1 , $2 , $3 , $4 , $5) RETURNING * ;",
+      [title, content, post_timestamp, category, user_id]
     );
 
     if (newPost.rows.length === 0) throw new Error("Error creating a new post");
