@@ -2,7 +2,6 @@ const Entry = require("../models/Entry");
 
 const index = async (req, res) => {
   try {
-    console.log(req.user_id);
     const posts = await Entry.showAll(req.user_id);
     res.status(200).json({ success: true, data: posts });
   } catch (err) {
@@ -17,6 +16,23 @@ const show = async (req, res) => {
       post_id: id,
       user_id: req.user_id,
     });
+    res.status(200).json({ success: true, data: posts });
+  } catch (err) {
+    res.status(404).json({ success: false, error: err.message });
+  }
+};
+
+const search = async (req, res) => {
+  try {
+    const search = req.query;
+
+    const entries = Object.entries(search);
+
+    const posts = await Entry.search({
+      entries: entries,
+      user_id: req.user_id,
+    });
+
     res.status(200).json({ success: true, data: posts });
   } catch (err) {
     res.status(404).json({ success: false, error: err.message });
@@ -56,4 +72,4 @@ const destroy = async (req, res) => {
   }
 };
 
-module.exports = { index, show, create, update, destroy };
+module.exports = { index, show, create, update, destroy, search };
