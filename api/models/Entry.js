@@ -47,11 +47,7 @@ class Entry {
     }
     `;
 
-    console.log(query);
-
     const posts = await db.query(query, [...values, user_id]);
-
-    if (posts.rows.length === 0) throw new Error("No entry found");
 
     return posts.rows.map((p) => new Entry(p));
   }
