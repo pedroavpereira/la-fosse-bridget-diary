@@ -56,7 +56,7 @@ const signup = async (req, res) => {
             .status(500)
             .json({ success: false, error: "Error generating token" });
         } else {
-          res.status(200).json({ success: true, data: { token: data } });
+          res.status(201).json({ success: true, data: { token: data } });
         }
       }
     );
