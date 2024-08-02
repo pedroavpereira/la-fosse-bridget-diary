@@ -9,15 +9,15 @@ class Entry {
   }
 
   static async showAll() {
-    const posts = await db.query("Select * from posts;");
+    const posts = await db.query("Select * from post;");
 
     if (posts.rows.length === 0) throw new Error("No entry found");
 
-    return posts.rows.map((p) => new Entry());
+    return posts.rows.map((p) => new Entry(p));
   }
 
   static async showOneById(id) {
-    const post = await db.query("Select * from posts WHERE post_id = $1", [id]);
+    const post = await db.query("Select * from post WHERE post_id = $1", [id]);
 
     if (post.rows.length === 0) throw new Error("No entry found");
 
@@ -26,7 +26,7 @@ class Entry {
 
   static async create(data) {
     const newPost = await db.query(
-      "INSERT INTO posts (title,content,user_id) VALUES ($1 , $2 , $3 ) RETURNING * ;",
+      "INSERT INTO post (title,content,user_id) VALUES ($1 , $2 , $3 ) RETURNING * ;",
       [data.title, data.content, data.user_id]
     );
 
@@ -36,7 +36,7 @@ class Entry {
   }
 
   async destroy() {
-    const deletedPost = db.query("DELETE FROM posts WHERE post_id = $1 ", [
+    const deletedPost = db.query("DELETE FROM post WHERE post_id = $1 ", [
       this.id,
     ]);
 
