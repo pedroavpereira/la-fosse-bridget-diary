@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const diaryRouter = require("./routers/diary");
+const userRouter = require("./routers/user");
 
 const app = express();
 
@@ -8,6 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/diary", diaryRouter);
+app.use("/auth", userRouter);
 
 app.use("/", (req, res) => {
   res.status(200).json({
