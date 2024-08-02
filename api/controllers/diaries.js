@@ -2,7 +2,8 @@ const Entry = require("../models/Entry");
 
 const index = async (req, res) => {
   try {
-    const posts = await Entry.showAll();
+    console.log(req.user_id);
+    const posts = await Entry.showAll(req.user_id);
     res.status(200).json({ success: true, data: posts });
   } catch (err) {
     res.status(404).json({ sucess: false, error: err.message });
@@ -12,7 +13,10 @@ const index = async (req, res) => {
 const show = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const posts = await Entry.showOneById(id);
+    const posts = await Entry.showOneById({
+      post_id: id,
+      user_id: req.user_id,
+    });
     res.status(200).json({ success: true, data: posts });
   } catch (err) {
     res.status(404).json({ success: false, error: err.message });

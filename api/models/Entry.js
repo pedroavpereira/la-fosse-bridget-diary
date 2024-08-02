@@ -8,16 +8,21 @@ class Entry {
     this.user_id = user_id;
   }
 
-  static async showAll() {
-    const posts = await db.query("Select * from post;");
+  static async showAll(userId) {
+    const posts = await db.query("Select * from post WHERE user_id = $1;", [
+      userId,
+    ]);
 
     if (posts.rows.length === 0) throw new Error("No entry found");
 
     return posts.rows.map((p) => new Entry(p));
   }
 
-  static async showOneById(id) {
-    const post = await db.query("Select * from post WHERE post_id = $1", [id]);
+  static async showOneById({ post_id, user_id }) {
+    const post = await db.query(
+      "Select * from post WHERE post_id = $1 AND user_id = $2",
+      [post_id, user_id]
+    );
 
     if (post.rows.length === 0) throw new Error("No entry found");
 

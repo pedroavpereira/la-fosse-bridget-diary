@@ -13,9 +13,8 @@ const login = async (req, res) => {
 
     if (!match) throw new Error("Unable to authenticate");
 
-    console.log("BEFORE SINGING");
     jwt.sign(
-      { username: user.username },
+      { user_id: user.user_id },
       process.env.SECRET_TOKEN,
       {
         expiresIn: 3600,
@@ -45,7 +44,7 @@ const signup = async (req, res) => {
     const newUser = await User.create(data);
 
     jwt.sign(
-      { username: newUser.username },
+      { user_id: newUser.user_id },
       process.env.SECRET_TOKEN,
       {
         expiresIn: 3600,
