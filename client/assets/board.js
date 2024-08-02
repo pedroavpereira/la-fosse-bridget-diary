@@ -44,9 +44,12 @@ function createPostElement(data) {
 
 // Load posts from the server, this is from chatgpt dont know if it works
 async function loadPosts() {
-  const response = await fetch("http://127.0.0.1:3000/diary/", {
-    headers: { Authorization: localStorage.getItem("token") },
-  });
+  const response = await fetch(
+    "https://la-fosse-bridget-diary.onrender.com/diary/",
+    {
+      headers: { Authorization: localStorage.getItem("token") },
+    }
+  );
 
   if (response.status === 200) {
     const { data } = await response.json();
@@ -83,7 +86,10 @@ document.getElementById("post-form").addEventListener("submit", async (e) => {
     }),
   };
 
-  const result = await fetch("http://127.0.0.1:3000/diary", options);
+  const result = await fetch(
+    "https://la-fosse-bridget-diary.onrender.com/diary",
+    options
+  );
 
   if (result.status === 201) {
     loadPosts();
